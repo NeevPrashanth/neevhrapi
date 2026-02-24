@@ -34,3 +34,5 @@ build/
 src/main/resources/client_secret.json
 *client_secret*.json
 src/main/resources/client_secret.json
+client_secret.json
+src/main/resources/client_secret.json
