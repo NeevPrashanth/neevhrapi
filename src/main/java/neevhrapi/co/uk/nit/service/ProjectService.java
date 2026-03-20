@@ -286,6 +286,8 @@ public class ProjectService {
             p.name AS project_name,
             t.id AS task_id,
             t.name AS task_name,
+            t.start_date AS task_start_date,
+            t.end_date AS task_end_date,
             ts.date,
             ts.hours_spent,
             ts.description,
@@ -317,6 +319,8 @@ public class ProjectService {
             dto.setProjectName(rs.getString("project_name"));
             dto.setTaskId(rs.getInt("task_id"));
             dto.setTaskName(rs.getString("task_name"));
+            dto.setTaskStartDate((Objects.isNull(rs.getDate("task_start_date")) ? null : rs.getDate("task_start_date").toLocalDate()));
+            dto.setTaskEndDate((Objects.isNull(rs.getDate("task_end_date")) ? null : rs.getDate("task_end_date").toLocalDate()));
             dto.setDate((Objects.isNull(rs.getDate("date"))?null:rs.getDate("date").toLocalDate()));
             dto.setHoursSpent(rs.getObject("hours_spent") != null ? rs.getDouble("hours_spent") : null);
             dto.setDescription(rs.getString("description"));
@@ -374,6 +378,15 @@ public class ProjectService {
 
                 List<MessageResponse.Schedule> schedules = new ArrayList<>();
                 int taskId = taskEntries.get(0).getTaskId();
+                LocalDate taskStartDate = taskEntries.get(0).getTaskStartDate();
+                LocalDate taskEndDate = taskEntries.get(0).getTaskEndDate();
+                LocalDate weekStart = weekDates.get(0);
+                LocalDate weekEnd = weekDates.get(weekDates.size() - 1);
+                boolean startsAfterWeek = taskStartDate != null && taskStartDate.isAfter(weekEnd);
+                boolean endsBeforeWeek = taskEndDate != null && taskEndDate.isBefore(weekStart);
+                if (startsAfterWeek || endsBeforeWeek) {
+                    continue;
+                }
                 for (LocalDate date : weekDates) {
                     Optional<TimesheetEntryDTO> matchingEntry = taskEntries.stream()
                             .filter(e -> e.getDate() != null && e.getDate().equals(date))
@@ -381,7 +394,9 @@ public class ProjectService {
 
                     boolean isFutureDate = date.isAfter(LocalDate.now());
                     boolean isStatusInactive = matchingEntry.map(e -> e.getStatus() != 0 && e.getStatus() != 1).orElse(false);
-                    boolean isActive = !isFutureDate && !isStatusInactive;
+                    boolean isBeforeStartDate = taskStartDate != null && date.isBefore(taskStartDate);
+                    boolean isExpiredForDate = taskEndDate != null && date.isAfter(taskEndDate);
+                    boolean isActive = !isFutureDate && !isStatusInactive && !isBeforeStartDate && !isExpiredForDate;
 
 
                     schedules.add(MessageResponse.Schedule.builder()
@@ -400,8 +415,10 @@ public class ProjectService {
                         .build());
             }
 
-            weekBuilder.tasks(tasks);
-            result.add(weekBuilder.build());
+            if (!tasks.isEmpty()) {
+                weekBuilder.tasks(tasks);
+                result.add(weekBuilder.build());
+            }
         }
 
         return result;
@@ -539,4 +556,6 @@ public class ProjectService {
     }
 
 }
+
+
 

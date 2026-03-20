@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder
@@ -17,8 +16,13 @@ public class TimesheetEntryDTO {
     private String projectName;
     private int taskId;
     private String taskName;
+    private LocalDate taskStartDate;
+    private LocalDate taskEndDate;
     private LocalDate date;
     private Double hoursSpent;
     private String description;
     private int status;
 }
+
+
+
