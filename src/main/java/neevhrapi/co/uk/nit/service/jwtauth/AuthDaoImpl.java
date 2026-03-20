@@ -54,6 +54,20 @@ public class AuthDaoImpl implements AuthDao {
             return null; // or throw custom NotFoundException
         }
     }
+    private User findByUserId(Long userId) {
+        String sql = "SELECT id, username, password FROM users WHERE id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{userId}, (rs, rowNum) -> {
+                User u = new User();
+                u.setId(rs.getLong("id"));
+                u.setUsername(rs.getString("username"));
+                u.setPassword(rs.getString("password"));
+                return u;
+            });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
 
     private final String SECRET_KEY = "your-very-secret-key";
 
@@ -90,6 +104,24 @@ public class AuthDaoImpl implements AuthDao {
                 .token(token)
                 .refresh_token(refreshToken)
                 .build();
+    }
+    @Override
+    public void changePassword(Long userId, String currentPassword, String newPassword, String authenticatedUsername) {
+        User user = findByUserId(userId);
+        if (Objects.isNull(user)) {
+            throw new RuntimeException("User not found");
+        }
+        if (!user.getUsername().equals(authenticatedUsername)) {
+            throw new RuntimeException("Not authorized to change this user password");
+        }
+        if (!user.getPassword().equals(currentPassword)) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        int updated = jdbcTemplate.update("UPDATE users SET password = ? WHERE id = ?", newPassword, userId);
+        if (updated != 1) {
+            throw new RuntimeException("Unable to change password");
+        }
     }
 
     public boolean validateToken(String token) {

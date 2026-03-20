@@ -6,4 +6,7 @@ import neevhrapi.co.uk.nit.domains.jwtauth.AuthResponse;
 public interface AuthDao {
 
     public AuthResponse authenticateAndGenerateToken(AuthRequest request);
+
+    public void changePassword(Long userId, String currentPassword, String newPassword, String authenticatedUsername);
 }
+

@@ -7,6 +7,7 @@ import neevhrapi.co.uk.nit.domains.Project;
 import neevhrapi.co.uk.nit.domains.jwtauth.AuthRequest;
 import neevhrapi.co.uk.nit.domains.jwtauth.AuthResponse;
 import neevhrapi.co.uk.nit.domains.jwtauth.RefreshTokenReq;
+import neevhrapi.co.uk.nit.domains.jwtauth.ChangePasswordRequest;
 import neevhrapi.co.uk.nit.domains.projectmgt.*;
 import neevhrapi.co.uk.nit.domains.timesheet.TimesheetData;
 import neevhrapi.co.uk.nit.domains.timesheet.TimesheetStatusUpdateRequest;
@@ -133,6 +134,21 @@ public class NitController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
+    @PostMapping(value = NitConstants.CHANGE_PASSWORD_ENDPOINT)
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            logger.info("changePassword payload - userId: {}, username: {}", request.getUserId(), authentication.getName());
+            authService.changePassword(request, authentication.getName());
+            String response = "Password changed successfully.";
+            logger.info("changePassword response: {}", response);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            String response = "Error while changing password: " + e.getMessage();
+            logger.error("changePassword response: {}", response, e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 
     @GetMapping(value = GET_RESOURCES_ENDPOINT)
     public List<UserDTO> getUsersExcludingManager() {
@@ -234,3 +250,4 @@ public class NitController {
         return ResponseEntity.ok(response);
     }
 }
+

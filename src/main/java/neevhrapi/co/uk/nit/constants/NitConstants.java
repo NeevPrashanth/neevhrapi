@@ -34,7 +34,9 @@ public class NitConstants {
 
     public static final String TASKTRACKER_ENDPOINT = "/neevhrapi/tasktracker/v1";
     public static final String ADDUSER_ENDPOINT = "/neevhrapi/addUser/v1";
+    public static final String CHANGE_PASSWORD_ENDPOINT = "/neevhrapi/change-password/v1";
 
 
 
 }
+
