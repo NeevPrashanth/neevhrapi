@@ -1,5 +1,7 @@
 package neevhrapi.co.uk.nit.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import neevhrapi.co.uk.nit.constants.NitConstants;
 import neevhrapi.co.uk.nit.domains.Project;
 import neevhrapi.co.uk.nit.domains.jwtauth.AuthRequest;
@@ -23,13 +25,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import static neevhrapi.co.uk.nit.constants.NitConstants.*;
 
 @RestController
 public class NitController {
     private static final Logger logger = LogManager.getLogger(NitController.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static List<Project> sentprojects = null;
     @Autowired
@@ -39,145 +41,196 @@ public class NitController {
     @Autowired
     private AuthService authService;
 
-    @GetMapping(value =TIMESHEET_BYWEEK_ENDPOINT)
-    public List<WeekTimesheet> getCurrentWeekTimesheet( @RequestParam int weekFlag // 0 = current, 1 = previous, 2 = previous-previous
+    @GetMapping(value = TIMESHEET_BYWEEK_ENDPOINT)
+    public List<WeekTimesheet> getCurrentWeekTimesheet(@RequestParam int weekFlag // 0 = current, 1 = previous, 2 =
+                                                                                  // previous-previous
     ) {
         if (weekFlag < 0 || weekFlag > 2) {
             throw new IllegalArgumentException("Invalid weekFlag. Allowed values: 0, 1, 2");
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.info("username: {}", authentication.getName());
-        List<TimesheetEntryDTO> flatList = projectService.getTimesheetEntriesForUser(authentication.getName(), weekFlag);
-        return projectService.mapToWeekTimesheet(flatList,weekFlag);
+        logger.info("getCurrentWeekTimesheet payload - weekFlag: {}, username: {}", weekFlag, authentication.getName());
+        List<TimesheetEntryDTO> flatList = projectService.getTimesheetEntriesForUser(authentication.getName(),
+                weekFlag);
+        List<WeekTimesheet> response = projectService.mapToWeekTimesheet(flatList, weekFlag);
+        logger.info("getCurrentWeekTimesheet response JSON: {}", toJson(response));
+        return response;
     }
 
-    @PostMapping(value =TIMESHEET_BYWEEK_ENDPOINT)
+    private String toJson(Object value) {
+        try {
+            return objectMapper.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            logger.warn("Unable to serialize response to JSON", e);
+            return String.valueOf(value);
+        }
+    }
+
+    @PostMapping(value = TIMESHEET_BYWEEK_ENDPOINT)
     public ResponseEntity<String> submitTimesheet(
-                @RequestBody List<WeekTimesheet> weekTimesheetList
-    ) {
+            @RequestBody List<WeekTimesheet> weekTimesheetList) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            logger.info("username: {}", authentication.getName());
+            logger.info("submitTimesheet payload - username: {}, entries: {}", authentication.getName(),
+                    weekTimesheetList == null ? 0 : weekTimesheetList.size());
             projectService.saveTimesheet(authentication.getName(), weekTimesheetList);
-            return ResponseEntity.ok("Timesheet submitted successfully.");
+            String response = "Timesheet submitted successfully.";
+            logger.info("submitTimesheet response: {}", response);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error while submitting timesheet: " + e.getMessage());
+            String response = "Error while submitting timesheet: " + e.getMessage();
+            logger.error("submitTimesheet response: {}", response, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @PostMapping(value = NitConstants.GET_TOKEN_ENDPOINT)
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
         try {
-            logger.info("received token request: {}", request);
-
-            return ResponseEntity.ok(authService.authenticateAndGenerateToken(request));
+            logger.info("authenticate payload - username: {}, applicationKey: {}", request.getUsername(),
+                    request.getApplicationKey());
+            AuthResponse authResponse = authService.authenticateAndGenerateToken(request);
+            logger.info("authenticate response: token issued for username {}", request.getUsername());
+            return ResponseEntity.ok(authResponse);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials or application key.");
+            String response = "Invalid credentials or application key.";
+            logger.error("authenticate response: {}", response, e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 
     @PostMapping(value = NitConstants.GET_REFERSH_TOKEN_ENDPOINT)
     public ResponseEntity<?> refeshtoken(@RequestBody RefreshTokenReq request) {
         try {
-            logger.info("Received REFRESH token request: {}", request);
+            String refreshToken = request.getRefreshToken();
+            logger.info("refeshtoken payload - refresh token length: {}",
+                    refreshToken == null ? 0 : refreshToken.length());
 
-            CredentialStore.CredentialRecord record = credentialStore.getCredentialsByRefreshToken(request.getRefreshToken());
+            CredentialStore.CredentialRecord record = credentialStore
+                    .getCredentialsByRefreshToken(request.getRefreshToken());
 
             if (record == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired refresh token.");
+                String response = "Invalid or expired refresh token.";
+                logger.info("refeshtoken response: {}", response);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
 
-            logger.info("received REFRESHtoken request: {}", request);
             AuthRequest authrequest = AuthRequest
                     .builder()
                     .password(record.getPassword())
                     .username(record.getUsername())
                     .applicationKey(record.getApplicationKey())
                     .build();
-            // Invalidate old refresh token for security
-            AuthResponse resposne = authService.authenticateAndGenerateToken(authrequest);
+            AuthResponse response = authService.authenticateAndGenerateToken(authrequest);
             credentialStore.invalidateRefreshToken(request.getRefreshToken());
 
-            return ResponseEntity.ok(resposne);
-
+            logger.info("refeshtoken response: new token issued for username {}", record.getUsername());
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials or application key.");
+            String response = "Invalid credentials or application key.";
+            logger.error("refeshtoken response: {}", response, e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
 
     @GetMapping(value = GET_RESOURCES_ENDPOINT)
     public List<UserDTO> getUsersExcludingManager() {
-        return projectService.getUsersExcludingManager();
+        logger.info("getUsersExcludingManager payload: none");
+        List<UserDTO> response = projectService.getUsersExcludingManager();
+        logger.info("getUsersExcludingManager response: {} user(s)", response.size());
+        return response;
     }
 
     @GetMapping(value = GET_PROJ_STATUS_ENDPOINT)
     public List<ProjectStatusDTO> getProjectStatuses() {
-        return projectService.getAllProjectStatuses();
+        logger.info("getProjectStatuses payload: none");
+        List<ProjectStatusDTO> response = projectService.getAllProjectStatuses();
+        logger.info("getProjectStatuses response: {} status record(s)", response.size());
+        return response;
     }
 
     @GetMapping(value = GET_PROJ_TASKS_ENDPOINT)
     public List<TaskResponseDTO> getTasksByProject(@PathVariable int projectId) {
-        return projectService.getTasksByProjectId(projectId);
+        logger.info("getTasksByProject payload - projectId: {}", projectId);
+        List<TaskResponseDTO> response = projectService.getTasksByProjectId(projectId);
+        logger.info("getTasksByProject response: {} task(s)", response.size());
+        return response;
     }
 
     @PostMapping(value = GET_PROJ_TASKS_ENDPOINT)
-    public ResponseEntity<?> createTask(@PathVariable int projectId,@RequestBody TaskRequest request) {
-        int taskId = projectService.createTask(projectId,request);
-        return ResponseEntity.ok("Task created successfully with ID: " + taskId);
+    public ResponseEntity<?> createTask(@PathVariable int projectId, @RequestBody TaskRequest request) {
+        logger.info("createTask payload - projectId: {}, request: {}", projectId, request);
+        int taskId = projectService.createTask(projectId, request);
+        String response = "Task created successfully with ID: " + taskId;
+        logger.info("createTask response: {}", response);
+        return ResponseEntity.ok(response);
     }
 
-    //updateTask endpoint
     @PutMapping(TASK_ENDPOINT + "/{taskId}")
     public ResponseEntity<?> updateTask(@PathVariable int taskId, @RequestBody TaskRequest request) {
+        logger.info("updateTask payload - taskId: {}, request: {}", taskId, request);
         projectService.updateTask(taskId, request);
-        return ResponseEntity.ok("Task updated successfully with ID: " + taskId);
+        String response = "Task updated successfully with ID: " + taskId;
+        logger.info("updateTask response: {}", response);
+        return ResponseEntity.ok(response);
     }
 
-
-    //add project endpoint
     @PostMapping(value = PROJECTS_ENDPOINT)
     public ResponseEntity<?> createProject(@RequestBody ProjectRequest request) {
+        logger.info("createProject payload: {}", request);
         int projectId = projectService.createProject(request);
-        return ResponseEntity.ok("Project created successfully with ID: " + projectId);
-    }
-    @PutMapping(PROJECTS_ENDPOINT + "/{projectId}")
-    public ResponseEntity<?> updateProject(@PathVariable int projectId, @RequestBody ProjectRequest request) {
-        projectService.updateProject(projectId, request);
-        return ResponseEntity.ok("Project updated successfully with ID: " + projectId);
-    }
-    @GetMapping(value = PROJECTS_ENDPOINT)
-    public Map<String, List<neevhrapi.co.uk.nit.domains.projectmgt.Project>> getAllProjects() {
-        return projectService.getProjectsGroupedByStatus();
-    }
-    @GetMapping(value = EMPLOYEE_ENDPOINT)
-    public List<User> getUsers() {
-        return projectService.getAllUsers();
+        String response = "Project created successfully with ID: " + projectId;
+        logger.info("createProject response: {}", response);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping(GET_TIMESHEET_ENDPOINT+"/{userId}")
+    @PutMapping(PROJECTS_ENDPOINT + "/{projectId}")
+    public ResponseEntity<?> updateProject(@PathVariable int projectId, @RequestBody ProjectRequest request) {
+        logger.info("updateProject payload - projectId: {}, request: {}", projectId, request);
+        projectService.updateProject(projectId, request);
+        String response = "Project updated successfully with ID: " + projectId;
+        logger.info("updateProject response: {}", response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(value = PROJECTS_ENDPOINT)
+    public Map<String, List<neevhrapi.co.uk.nit.domains.projectmgt.Project>> getAllProjects() {
+        logger.info("getAllProjects payload: none");
+        Map<String, List<neevhrapi.co.uk.nit.domains.projectmgt.Project>> response = projectService
+                .getProjectsGroupedByStatus();
+        logger.info("getAllProjects response groups: {}", response.keySet());
+        return response;
+    }
+
+    @GetMapping(value = EMPLOYEE_ENDPOINT)
+    public List<User> getUsers() {
+        logger.info("getUsers payload: none");
+        List<User> response = projectService.getAllUsers();
+        logger.info("getUsers response: {} user(s)", response.size());
+        return response;
+    }
+
+    @GetMapping(GET_TIMESHEET_ENDPOINT + "/{userId}")
     public ResponseEntity<TimesheetData> getUserTimesheet(
             @PathVariable int userId,
-            @RequestParam String endDate
-    ) {
+            @RequestParam String endDate) {
+        logger.info("getUserTimesheet payload - userId: {}, endDate: {}", userId, endDate);
         TimesheetData result = projectService.getTimesheetByUser(userId, endDate);
         if (result == null) {
+            logger.info("getUserTimesheet response: 404 Not Found");
             return ResponseEntity.notFound().build();
         }
+        logger.info("getUserTimesheet response: {}", result);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping(GET_TIMESHEET_ENDPOINT)
     public ResponseEntity<String> approveTimesheets(@RequestBody TimesheetStatusUpdateRequest request) {
+        logger.info("approveTimesheets payload: {}", request);
         int updated = projectService.updateStatusToApproved(request.getId());
-        return ResponseEntity.ok(updated + " timesheet(s) approved.");
+        String response = updated + " timesheet(s) approved.";
+        logger.info("approveTimesheets response: {}", response);
+        return ResponseEntity.ok(response);
     }
-
-
-
-
 }
-

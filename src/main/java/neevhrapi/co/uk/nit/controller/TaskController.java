@@ -21,35 +21,39 @@ import static neevhrapi.co.uk.nit.constants.NitConstants.TASKTRACKER_ENDPOINT;
 @RestController
 public class TaskController {
     private static final Logger logger = LogManager.getLogger(TaskController.class);
+
     @Autowired
     private TaskService taskService;
-    @PostMapping(value =TASKTRACKER_ENDPOINT)
+
+    @PostMapping(value = TASKTRACKER_ENDPOINT)
     public ResponseEntity<String> createTask(@RequestBody Task task) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.info("username: {}", authentication.getName());
+        logger.info("createTask payload - username: {}, task: {}", authentication.getName(), task);
         task.setUserid(taskService.getUserIdByUsername(authentication.getName()));
-        logger.info("Create tasktracker api: {}", task);
         int result = taskService.save(task);
-        String res= result > 0 ? "Task inserted successfully" : "Failed to insert task";
-        return ResponseEntity.ok(res);
+        String response = result > 0 ? "Task inserted successfully" : "Failed to insert task";
+        logger.info("createTask response: {}", response);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value =TASKTRACKER_ENDPOINT)
+    @GetMapping(value = TASKTRACKER_ENDPOINT)
     public ResponseEntity<List<TaskResponse>> getTasksByUserAndDate(
-                     @RequestParam("date") String dateStr) {
+            @RequestParam("date") String dateStr) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.info("username: {}", authentication.getName());
-     int userId=taskService.getUserIdByUsername(authentication.getName());
+        logger.info("getTasksByUserAndDate payload - username: {}, date: {}", authentication.getName(), dateStr);
+        int userId = taskService.getUserIdByUsername(authentication.getName());
 
         LocalDate date = LocalDate.parse(dateStr);
         List<TaskResponse> tasks = taskService.findByUserIdAndDate(userId, date);
+        logger.info("getTasksByUserAndDate response: {} task(s)", tasks.size());
         return ResponseEntity.ok(tasks);
     }
-    @PostMapping(value =ADDUSER_ENDPOINT)
+
+    @PostMapping(value = ADDUSER_ENDPOINT)
     public ResponseEntity<String> addUser(@RequestBody User user) {
-        String result = taskService.addUser(user);
-        return ResponseEntity.ok(result);
+        logger.info("addUser payload: {}", user);
+        String response = taskService.addUser(user);
+        logger.info("addUser response: {}", response);
+        return ResponseEntity.ok(response);
     }
-
 }
-

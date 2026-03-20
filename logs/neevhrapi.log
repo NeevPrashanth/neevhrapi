@@ -1,0 +1,104 @@
+2026-03-20 05:18:46.641 [main] INFO  n.co.uk.nit.NeevHrApiApplication - Starting NeevHrApiApplication using Java 17.0.12 with PID 16792 (C:\projects\neevhrapi\target\classes started by Administrator in C:\projects\neevhrapi)
+2026-03-20 05:18:46.654 [main] INFO  n.co.uk.nit.NeevHrApiApplication - The following 1 profile is active: "dev"
+2026-03-20 05:18:53.135 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name databaseUserDetailsService
+2026-03-20 05:18:54.614 [main] INFO  n.co.uk.nit.NeevHrApiApplication - Started NeevHrApiApplication in 9.433 seconds (process running for 10.227)
+2026-03-20 05:20:07.515 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQcmFzaGFudGgiLCJyb2xlcyI6WyJNYW5hZ2VyIl0sImlhdCI6MTc3Mzk4MzE0MSwiZXhwIjoxNzc0MDY5NTQxfQ.za2dXk0sSb9KN94jSRk0DJ25psSgaXesZ4K3G1-L8kWkxBYSlB074lZF9fi6jmEQesUc78-ZrFOWVoPPHkIKEw
+2026-03-20 05:20:07.517 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQcmFzaGFudGgiLCJyb2xlcyI6WyJNYW5hZ2VyIl0sImlhdCI6MTc3Mzk4MzE0MSwiZXhwIjoxNzc0MDY5NTQxfQ.za2dXk0sSb9KN94jSRk0DJ25psSgaXesZ4K3G1-L8kWkxBYSlB074lZF9fi6jmEQesUc78-ZrFOWVoPPHkIKEw
+2026-03-20 05:20:07.728 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Prashanth
+2026-03-20 05:20:08.316 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Manager]
+2026-03-20 05:20:08.316 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Prashanth
+2026-03-20 05:20:08.580 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.controller.NitController - received token request: AuthRequest(applicationKey=APP-123456, username=Prashanth, password=Mouna)
+2026-03-20 05:20:08.603 [http-nio-0.0.0.0-9095-exec-1] INFO  n.c.u.n.service.jwtauth.AuthDaoImpl - User(id=2, username=Prashanth, password=Mouna, roles=[Manager])
+2026-03-20 05:20:10.623 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQcmFzaGFudGgiLCJyb2xlcyI6WyJNYW5hZ2VyIl0sImlhdCI6MTc3Mzk4NDAwOCwiZXhwIjoxNzc0MDcwNDA4fQ._Np0EgvM7R0t4qyMvydRNvueIypMSUO4Z_5Zanm9IKbNcUPn-PjYjJ3C2suBujHjKFPKWI95olGuzOEEjsWQ8g
+2026-03-20 05:20:10.623 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQcmFzaGFudGgiLCJyb2xlcyI6WyJNYW5hZ2VyIl0sImlhdCI6MTc3Mzk4NDAwOCwiZXhwIjoxNzc0MDcwNDA4fQ._Np0EgvM7R0t4qyMvydRNvueIypMSUO4Z_5Zanm9IKbNcUPn-PjYjJ3C2suBujHjKFPKWI95olGuzOEEjsWQ8g
+2026-03-20 05:20:10.627 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Prashanth
+2026-03-20 05:20:10.631 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Manager]
+2026-03-20 05:20:10.631 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Prashanth
+2026-03-20 05:20:10.634 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.controller.NitController - username: Prashanth
+2026-03-20 05:40:32.109 [main] INFO  n.co.uk.nit.NeevHrApiApplication - Starting NeevHrApiApplication using Java 17.0.12 with PID 17488 (C:\projects\neevhrapi\target\classes started by Administrator in C:\projects\neevhrapi)
+2026-03-20 05:40:32.114 [main] INFO  n.co.uk.nit.NeevHrApiApplication - The following 1 profile is active: "dev"
+2026-03-20 05:40:34.781 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name databaseUserDetailsService
+2026-03-20 05:40:35.598 [main] INFO  n.co.uk.nit.NeevHrApiApplication - Started NeevHrApiApplication in 4.324 seconds (process running for 4.875)
+2026-03-20 05:42:42.150 [main] INFO  n.co.uk.nit.NeevHrApiApplication - Starting NeevHrApiApplication using Java 17.0.12 with PID 20552 (C:\projects\neevhrapi\target\classes started by Administrator in C:\projects\neevhrapi)
+2026-03-20 05:42:42.155 [main] INFO  n.co.uk.nit.NeevHrApiApplication - The following 1 profile is active: "dev"
+2026-03-20 05:42:44.878 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name databaseUserDetailsService
+2026-03-20 05:42:45.689 [main] INFO  n.co.uk.nit.NeevHrApiApplication - Started NeevHrApiApplication in 4.348 seconds (process running for 4.806)
+2026-03-20 05:43:44.250 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: null
+2026-03-20 05:43:44.410 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.controller.NitController - authenticate payload - username: sindu, applicationKey: APP-123456
+2026-03-20 05:43:44.934 [http-nio-0.0.0.0-9095-exec-2] INFO  n.c.u.n.service.jwtauth.AuthDaoImpl - User(id=1, username=sindu, password=pass123, roles=[Developer])
+2026-03-20 05:43:45.000 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.controller.NitController - authenticate response: token issued for username sindu
+2026-03-20 05:46:14.066 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQcmFzaGFudGgiLCJyb2xlcyI6WyJNYW5hZ2VyIl0sImlhdCI6MTc3Mzk4NDAwOCwiZXhwIjoxNzc0MDcwNDA4fQ._Np0EgvM7R0t4qyMvydRNvueIypMSUO4Z_5Zanm9IKbNcUPn-PjYjJ3C2suBujHjKFPKWI95olGuzOEEjsWQ8g
+2026-03-20 05:46:14.066 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJQcmFzaGFudGgiLCJyb2xlcyI6WyJNYW5hZ2VyIl0sImlhdCI6MTc3Mzk4NDAwOCwiZXhwIjoxNzc0MDcwNDA4fQ._Np0EgvM7R0t4qyMvydRNvueIypMSUO4Z_5Zanm9IKbNcUPn-PjYjJ3C2suBujHjKFPKWI95olGuzOEEjsWQ8g
+2026-03-20 05:46:14.091 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Prashanth
+2026-03-20 05:46:14.100 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Manager]
+2026-03-20 05:46:14.100 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Prashanth
+2026-03-20 05:46:14.102 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.controller.NitController - authenticate payload - username: sreevani, applicationKey: APP-123456
+2026-03-20 05:46:14.108 [http-nio-0.0.0.0-9095-exec-4] INFO  n.c.u.n.service.jwtauth.AuthDaoImpl - User(id=3, username=Sreevani, password=pass123, roles=[Developer])
+2026-03-20 05:46:14.109 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.controller.NitController - authenticate response: token issued for username sreevani
+2026-03-20 05:46:15.980 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU1NzQsImV4cCI6MTc3NDA3MTk3NH0.U0tQCIhW_yU-KxrJlIoPKXnw8MM750bnbyo4OTNpCt9hWpHVHj6AyhGAlH9ZRMhWnJVf3srxEOC4HEDZCxoy0w
+2026-03-20 05:46:15.980 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU1NzQsImV4cCI6MTc3NDA3MTk3NH0.U0tQCIhW_yU-KxrJlIoPKXnw8MM750bnbyo4OTNpCt9hWpHVHj6AyhGAlH9ZRMhWnJVf3srxEOC4HEDZCxoy0w
+2026-03-20 05:46:15.980 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:46:15.985 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:46:15.985 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:46:15.989 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 0, username: Sreevani
+2026-03-20 05:46:16.012 [http-nio-0.0.0.0-9095-exec-5] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:46:51.324 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU1NzQsImV4cCI6MTc3NDA3MTk3NH0.U0tQCIhW_yU-KxrJlIoPKXnw8MM750bnbyo4OTNpCt9hWpHVHj6AyhGAlH9ZRMhWnJVf3srxEOC4HEDZCxoy0w
+2026-03-20 05:46:51.324 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU1NzQsImV4cCI6MTc3NDA3MTk3NH0.U0tQCIhW_yU-KxrJlIoPKXnw8MM750bnbyo4OTNpCt9hWpHVHj6AyhGAlH9ZRMhWnJVf3srxEOC4HEDZCxoy0w
+2026-03-20 05:46:51.328 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:46:51.330 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:46:51.330 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:46:51.330 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 1, username: Sreevani
+2026-03-20 05:46:51.330 [http-nio-0.0.0.0-9095-exec-6] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:48:33.867 [http-nio-0.0.0.0-9095-exec-7] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: null
+2026-03-20 05:48:33.867 [http-nio-0.0.0.0-9095-exec-7] INFO  n.co.uk.nit.controller.NitController - authenticate payload - username: sreevani, applicationKey: APP-123456
+2026-03-20 05:48:33.867 [http-nio-0.0.0.0-9095-exec-7] INFO  n.c.u.n.service.jwtauth.AuthDaoImpl - User(id=3, username=Sreevani, password=pass123, roles=[Developer])
+2026-03-20 05:48:33.867 [http-nio-0.0.0.0-9095-exec-7] INFO  n.co.uk.nit.controller.NitController - authenticate response: token issued for username sreevani
+2026-03-20 05:48:35.861 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:48:35.861 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:48:35.861 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:48:35.861 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:48:35.876 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:48:35.876 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 0, username: Sreevani
+2026-03-20 05:48:35.876 [http-nio-0.0.0.0-9095-exec-8] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:48:45.486 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:48:45.486 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:48:45.496 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:48:45.498 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:48:45.498 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:48:45.498 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 1, username: Sreevani
+2026-03-20 05:48:45.505 [http-nio-0.0.0.0-9095-exec-9] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:48:47.341 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:48:47.341 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:48:47.341 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:48:47.341 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:48:47.341 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:48:47.341 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 0, username: Sreevani
+2026-03-20 05:48:47.352 [http-nio-0.0.0.0-9095-exec-10] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:49:08.702 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:08.702 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:08.715 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:49:08.717 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:49:08.717 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:49:08.717 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 1, username: Sreevani
+2026-03-20 05:49:08.724 [http-nio-0.0.0.0-9095-exec-1] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:49:10.694 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:10.694 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:10.698 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:49:10.702 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:49:10.702 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:49:10.702 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 2, username: Sreevani
+2026-03-20 05:49:10.704 [http-nio-0.0.0.0-9095-exec-2] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:49:14.073 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:14.073 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:14.079 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:49:14.079 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:49:14.079 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:49:14.079 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 1, username: Sreevani
+2026-03-20 05:49:14.085 [http-nio-0.0.0.0-9095-exec-3] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
+2026-03-20 05:49:14.861 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - authHeader received: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:14.862 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.util.JwtTokenUtil - validating token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJTcmVldmFuaSIsInJvbGVzIjpbIkRldmVsb3BlciJdLCJpYXQiOjE3NzM5ODU3MTMsImV4cCI6MTc3NDA3MjExM30.yCJwPooJg_lKhoaqVwNQ5j05X4w1c3jfgxLINv7RRP_xc1GKbi_tFpgCJoXD9BeI5veUSHRx4au5uIencsAq7w
+2026-03-20 05:49:14.862 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - username from token: Sreevani
+2026-03-20 05:49:14.872 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - Authorities: [ROLE_Developer]
+2026-03-20 05:49:14.872 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.filter.JwtAuthFilter - user details loaded for username: Sreevani
+2026-03-20 05:49:14.874 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet payload - weekFlag: 0, username: Sreevani
+2026-03-20 05:49:14.880 [http-nio-0.0.0.0-9095-exec-4] INFO  n.co.uk.nit.controller.NitController - getCurrentWeekTimesheet response: 1 week timesheet(s)
