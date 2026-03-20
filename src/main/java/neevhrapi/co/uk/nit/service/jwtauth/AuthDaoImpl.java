@@ -7,6 +7,8 @@ import neevhrapi.co.uk.nit.domains.jwtauth.AuthRequest;
 import neevhrapi.co.uk.nit.domains.jwtauth.AuthResponse;
 import neevhrapi.co.uk.nit.domains.jwtauth.User;
 import neevhrapi.co.uk.nit.service.CredentialStore;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,6 +20,7 @@ import java.util.Objects;
 
 @Repository
 public class AuthDaoImpl implements AuthDao {
+    private static final Logger logger = LogManager.getLogger(AuthDaoImpl.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -44,7 +47,7 @@ public class AuthDaoImpl implements AuthDao {
                     (rs, rowNum) -> rs.getString("role"));
 
             user.setRoles(roles);
-            System.out.println(user);
+            logger.info("{}", user);
             return user;
 
         } catch (EmptyResultDataAccessException e) {
@@ -91,11 +94,11 @@ public class AuthDaoImpl implements AuthDao {
 
     public boolean validateToken(String token) {
         try {
-            System.out.println("validating token: "+token);
+            logger.info("validating token: {}", token);
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            System.out.println("received exception while validating it");
+            logger.info("received exception while validating it");
             return false;
         }
     }
@@ -108,3 +111,4 @@ public class AuthDaoImpl implements AuthDao {
     }
 
 }
+

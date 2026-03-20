@@ -16,6 +16,8 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -24,6 +26,7 @@ import java.util.Properties;
 
 @Service
 public class EmailUtil {
+    private static final Logger logger = LogManager.getLogger(EmailUtil.class);
 
     private static final String APPLICATION_NAME = "Gmail API JavaMail XOAUTH2";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -91,7 +94,7 @@ public class EmailUtil {
         transport.connect("smtp.gmail.com", "admin@neevinfra.co.uk", credential.getAccessToken());
         transport.sendMessage(message, message.getAllRecipients());
         transport.close();
-        System.out.println("✅ Email sent successfully using OAuth2!");
+        logger.info("Email sent successfully using OAuth2!");
     }
 }
 

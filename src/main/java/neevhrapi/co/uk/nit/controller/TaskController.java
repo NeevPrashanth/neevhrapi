@@ -4,6 +4,8 @@ import neevhrapi.co.uk.nit.domains.tasktracker.Task;
 import neevhrapi.co.uk.nit.domains.tasktracker.TaskResponse;
 import neevhrapi.co.uk.nit.domains.tasktracker.User;
 import neevhrapi.co.uk.nit.service.TaskService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static neevhrapi.co.uk.nit.constants.NitConstants.ADDUSER_ENDPOINT;
@@ -19,14 +20,15 @@ import static neevhrapi.co.uk.nit.constants.NitConstants.TASKTRACKER_ENDPOINT;
 
 @RestController
 public class TaskController {
+    private static final Logger logger = LogManager.getLogger(TaskController.class);
     @Autowired
     private TaskService taskService;
     @PostMapping(value =TASKTRACKER_ENDPOINT)
     public ResponseEntity<String> createTask(@RequestBody Task task) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("username :"+authentication.getName());
+        logger.info("username: {}", authentication.getName());
         task.setUserid(taskService.getUserIdByUsername(authentication.getName()));
-        System.out.println(new Date() +" : Create tasktracker api"+task.toString());
+        logger.info("Create tasktracker api: {}", task);
         int result = taskService.save(task);
         String res= result > 0 ? "Task inserted successfully" : "Failed to insert task";
         return ResponseEntity.ok(res);
@@ -36,7 +38,7 @@ public class TaskController {
     public ResponseEntity<List<TaskResponse>> getTasksByUserAndDate(
                      @RequestParam("date") String dateStr) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("username :"+authentication.getName());
+        logger.info("username: {}", authentication.getName());
      int userId=taskService.getUserIdByUsername(authentication.getName());
 
         LocalDate date = LocalDate.parse(dateStr);
@@ -50,3 +52,4 @@ public class TaskController {
     }
 
 }
+

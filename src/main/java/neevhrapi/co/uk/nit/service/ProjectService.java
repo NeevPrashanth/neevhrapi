@@ -7,6 +7,8 @@ import neevhrapi.co.uk.nit.domains.Task;
 import neevhrapi.co.uk.nit.domains.projectmgt.*;
 import neevhrapi.co.uk.nit.domains.timesheet.*;
 import neevhrapi.co.uk.nit.domains.user.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -32,6 +34,7 @@ import java.util.stream.IntStream;
 
 @Service
 public class ProjectService {
+    private static final Logger logger = LogManager.getLogger(ProjectService.class);
 
     public List<Project> getAllProjects() {
         return List.of(
@@ -529,7 +532,7 @@ public class ProjectService {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public int updateStatusToApproved(List<Integer> ids) {
-        System.out.println("ids: "+ids);
+        logger.info("ids: {}", ids);
         String sql = "UPDATE timesheet SET status = 2 WHERE id IN (:ids)";
         MapSqlParameterSource parameters = new MapSqlParameterSource();
         parameters.addValue("ids", ids);
@@ -537,3 +540,4 @@ public class ProjectService {
     }
 
 }
+

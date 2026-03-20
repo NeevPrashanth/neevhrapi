@@ -12,6 +12,8 @@ import neevhrapi.co.uk.nit.domains.user.User;
 import neevhrapi.co.uk.nit.service.CredentialStore;
 import neevhrapi.co.uk.nit.service.ProjectService;
 import neevhrapi.co.uk.nit.service.jwtauth.AuthService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,7 @@ import static neevhrapi.co.uk.nit.constants.NitConstants.*;
 
 @RestController
 public class NitController {
+    private static final Logger logger = LogManager.getLogger(NitController.class);
 
     private static List<Project> sentprojects = null;
     @Autowired
@@ -44,7 +46,7 @@ public class NitController {
             throw new IllegalArgumentException("Invalid weekFlag. Allowed values: 0, 1, 2");
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("username :"+authentication.getName());
+        logger.info("username: {}", authentication.getName());
         List<TimesheetEntryDTO> flatList = projectService.getTimesheetEntriesForUser(authentication.getName(), weekFlag);
         return projectService.mapToWeekTimesheet(flatList,weekFlag);
     }
@@ -55,7 +57,7 @@ public class NitController {
     ) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("username :"+authentication.getName());
+            logger.info("username: {}", authentication.getName());
             projectService.saveTimesheet(authentication.getName(), weekTimesheetList);
             return ResponseEntity.ok("Timesheet submitted successfully.");
         } catch (Exception e) {
@@ -68,7 +70,7 @@ public class NitController {
     @PostMapping(value = NitConstants.GET_TOKEN_ENDPOINT)
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
         try {
-            System.out.println(new Date() + "received token request: " + request);
+            logger.info("received token request: {}", request);
 
             return ResponseEntity.ok(authService.authenticateAndGenerateToken(request));
         } catch (Exception e) {
@@ -80,7 +82,7 @@ public class NitController {
     @PostMapping(value = NitConstants.GET_REFERSH_TOKEN_ENDPOINT)
     public ResponseEntity<?> refeshtoken(@RequestBody RefreshTokenReq request) {
         try {
-            System.out.println(new Date() + " Received REFRESH token request: " + request);
+            logger.info("Received REFRESH token request: {}", request);
 
             CredentialStore.CredentialRecord record = credentialStore.getCredentialsByRefreshToken(request.getRefreshToken());
 
@@ -88,7 +90,7 @@ public class NitController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired refresh token.");
             }
 
-            System.out.println(new Date() + "received REFRESHtoken request: " + request);
+            logger.info("received REFRESHtoken request: {}", request);
             AuthRequest authrequest = AuthRequest
                     .builder()
                     .password(record.getPassword())
@@ -178,3 +180,4 @@ public class NitController {
 
 
 }
+
