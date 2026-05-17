@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -27,6 +28,8 @@ public class AuthDaoImpl implements AuthDao {
 
     @Autowired
     CredentialStore credentialStore;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private User findByUsername(String username) {
         String userSql = "SELECT id, username, password FROM users WHERE username = ?";
@@ -83,8 +86,8 @@ public class AuthDaoImpl implements AuthDao {
         if (Objects.isNull(user)) {
             throw  new RuntimeException("User not found");
         }
-        // Validate password (plaintext or hashed depending on your implementation)
-        if (!user.getPassword().equals(request.getPassword())) {
+        // Validate password using hash match.
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
@@ -98,8 +101,33 @@ public class AuthDaoImpl implements AuthDao {
                 .compact();
 
         // Store credentials and generate refresh token
-        String refreshToken = credentialStore.storeCredentials(user.getUsername(), user.getPassword(), request.getApplicationKey());
+        String refreshToken = credentialStore.storeCredentials(user.getUsername(), request.getApplicationKey());
 
+        return AuthResponse.builder()
+                .token(token)
+                .refresh_token(refreshToken)
+                .build();
+    }
+
+    public AuthResponse generateTokenFromRefreshContext(String username, String applicationKey) {
+        if (!"APP-123456".equals(applicationKey)) {
+            throw new RuntimeException("Invalid application key");
+        }
+
+        User user = findByUsername(username);
+        if (Objects.isNull(user)) {
+            throw new RuntimeException("User not found");
+        }
+
+        String token = Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("roles", user.getRoles())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .compact();
+
+        String refreshToken = credentialStore.storeCredentials(user.getUsername(), applicationKey);
         return AuthResponse.builder()
                 .token(token)
                 .refresh_token(refreshToken)
@@ -114,11 +142,12 @@ public class AuthDaoImpl implements AuthDao {
         if (!user.getUsername().equals(authenticatedUsername)) {
             throw new RuntimeException("Not authorized to change this user password");
         }
-        if (!user.getPassword().equals(currentPassword)) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
             throw new RuntimeException("Current password is incorrect");
         }
 
-        int updated = jdbcTemplate.update("UPDATE users SET password = ? WHERE id = ?", newPassword, userId);
+        String hashedNewPassword = passwordEncoder.encode(newPassword);
+        int updated = jdbcTemplate.update("UPDATE users SET password = ? WHERE id = ?", hashedNewPassword, userId);
         if (updated != 1) {
             throw new RuntimeException("Unable to change password");
         }

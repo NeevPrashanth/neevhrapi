@@ -11,10 +11,10 @@ public class CredentialStore {
     // Singleton in-memory store: refreshToken -> CredentialRecord
     private final Map<String, CredentialRecord> credentials = new ConcurrentHashMap<>();
 
-    // Save credentials and generate a refresh token
-    public String storeCredentials(String username, String password, String applicationKey) {
+    // Save credential context and generate a refresh token
+    public String storeCredentials(String username, String applicationKey) {
         String refreshToken = UUID.randomUUID().toString();
-        CredentialRecord record = new CredentialRecord(username, password, applicationKey, refreshToken);
+        CredentialRecord record = new CredentialRecord(username, applicationKey, refreshToken);
         credentials.put(refreshToken, record);
         return refreshToken;
     }
@@ -32,23 +32,17 @@ public class CredentialStore {
     // Internal class for storing credentials
     public static class CredentialRecord {
         private final String username;
-        private final String password;
         private final String applicationKey;
         private final String refreshToken;
 
-        public CredentialRecord(String username, String password, String applicationKey, String refreshToken) {
+        public CredentialRecord(String username, String applicationKey, String refreshToken) {
             this.username = username;
-            this.password = password;
             this.applicationKey = applicationKey;
             this.refreshToken = refreshToken;
         }
 
         public String getUsername() {
             return username;
-        }
-
-        public String getPassword() {
-            return password;
         }
 
         public String getApplicationKey() {

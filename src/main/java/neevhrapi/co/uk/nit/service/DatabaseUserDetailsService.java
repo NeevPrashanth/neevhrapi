@@ -38,7 +38,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 
         return User.builder()
                 .username(userRecord.getUsername())
-                .password("{noop}" + userRecord.getPassword()) // Add encoding here later
+                .password(userRecord.getPassword())
                 .authorities(authorities)
                 .build();
     }

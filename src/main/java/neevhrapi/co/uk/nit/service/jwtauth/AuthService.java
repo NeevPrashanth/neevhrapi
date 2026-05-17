@@ -23,6 +23,10 @@ public class AuthService {
         return userRepository.authenticateAndGenerateToken(request);
     }
 
+    public AuthResponse generateTokenFromRefreshContext(String username, String applicationKey) {
+        return userRepository.generateTokenFromRefreshContext(username, applicationKey);
+    }
+
     public void changePassword(ChangePasswordRequest request, String authenticatedUsername) {
         if (request == null || request.getUserId() == null || request.getCurrentPassword() == null || request.getNewPassword() == null) {
             throw new RuntimeException("userId, currentPassword and newPassword are required");

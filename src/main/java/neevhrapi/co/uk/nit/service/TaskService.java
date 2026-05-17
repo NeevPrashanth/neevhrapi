@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
@@ -20,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 public class TaskService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public int save(Task task) {
         String sql = "INSERT INTO task_schedule (userid, from_time, to_time, task_date, task) VALUES (?, ?, ?, ?, ?)";
@@ -68,7 +71,7 @@ public class TaskService {
         }
 
         String insertUserSql = "INSERT INTO users (username, password) VALUES (?, ?)";
-        jdbcTemplate.update(insertUserSql, user.getUsername(), user.getPassword());
+        jdbcTemplate.update(insertUserSql, user.getUsername(), passwordEncoder.encode(user.getPassword()));
 
         String getIdSql = "SELECT id FROM users WHERE username = ?";
         Integer userId = jdbcTemplate.queryForObject(getIdSql, Integer.class, user.getUsername());

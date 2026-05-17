@@ -116,13 +116,10 @@ public class NitController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
 
-            AuthRequest authrequest = AuthRequest
-                    .builder()
-                    .password(record.getPassword())
-                    .username(record.getUsername())
-                    .applicationKey(record.getApplicationKey())
-                    .build();
-            AuthResponse response = authService.authenticateAndGenerateToken(authrequest);
+            AuthResponse response = authService.generateTokenFromRefreshContext(
+                    record.getUsername(),
+                    record.getApplicationKey()
+            );
             credentialStore.invalidateRefreshToken(request.getRefreshToken());
 
             logger.info("refeshtoken response: new token issued for username {}", record.getUsername());

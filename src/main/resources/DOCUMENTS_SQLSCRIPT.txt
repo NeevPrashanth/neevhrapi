@@ -1,0 +1,99 @@
+CREATE TABLE IF NOT EXISTS document_request (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    employee_id INT NOT NULL,
+    document_name VARCHAR(255) NOT NULL,
+    requested_by INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    INDEX idx_doc_request_employee (employee_id),
+    CONSTRAINT fk_doc_request_employee FOREIGN KEY (employee_id) REFERENCES users(id),
+    CONSTRAINT fk_doc_request_manager FOREIGN KEY (requested_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS employee_document_upload (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    request_id INT NOT NULL,
+    employee_id INT NOT NULL,
+    original_file_name VARCHAR(255) NOT NULL,
+    stored_file_name VARCHAR(255) NOT NULL,
+    pending_file_path VARCHAR(1000),
+    approved_file_path VARCHAR(1000),
+    rejected_file_path VARCHAR(1000),
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    uploaded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    approved_at DATETIME NULL,
+    rejected_at DATETIME NULL,
+    approved_by INT NULL,
+    INDEX idx_doc_upload_request (request_id),
+    INDEX idx_doc_upload_employee (employee_id),
+    INDEX idx_doc_upload_status (status),
+    CONSTRAINT fk_doc_upload_request FOREIGN KEY (request_id) REFERENCES document_request(id),
+    CONSTRAINT fk_doc_upload_employee FOREIGN KEY (employee_id) REFERENCES users(id),
+    CONSTRAINT fk_doc_upload_approved_by FOREIGN KEY (approved_by) REFERENCES users(id)
+);
+
+ALTER TABLE employee_document_upload
+    ADD COLUMN IF NOT EXISTS rejected_file_path VARCHAR(1000) NULL,
+    ADD COLUMN IF NOT EXISTS rejected_at DATETIME NULL;
+
+CREATE TABLE IF NOT EXISTS employee_profile (
+    user_id INT PRIMARY KEY,
+    first_name VARCHAR(120) NOT NULL,
+    last_name VARCHAR(120) NOT NULL,
+    dob DATE NOT NULL,
+    email_id VARCHAR(255) NOT NULL UNIQUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_employee_profile_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS employee_finance_document (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    employee_id INT NOT NULL,
+    finance_year INT NOT NULL,
+    doc_type VARCHAR(30) NOT NULL,
+    original_file_name VARCHAR(255) NOT NULL,
+    stored_file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(1000) NOT NULL,
+    uploaded_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    uploaded_by INT NOT NULL,
+    CONSTRAINT fk_fin_doc_employee FOREIGN KEY (employee_id) REFERENCES users(id),
+    CONSTRAINT fk_fin_doc_uploaded_by FOREIGN KEY (uploaded_by) REFERENCES users(id),
+    CONSTRAINT uk_fin_doc UNIQUE (employee_id, finance_year, doc_type)
+);
+
+CREATE TABLE IF NOT EXISTS employee_address (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    address_type VARCHAR(20) NOT NULL,
+    line1 VARCHAR(255) NOT NULL,
+    line2 VARCHAR(255) NULL,
+    city VARCHAR(100) NOT NULL,
+    postal_code VARCHAR(30) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    approved_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    approved_by INT NOT NULL,
+    updated_at DATETIME NULL,
+    CONSTRAINT fk_emp_addr_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_emp_addr_approved_by FOREIGN KEY (approved_by) REFERENCES users(id),
+    CONSTRAINT uk_emp_addr UNIQUE (user_id, address_type)
+);
+
+CREATE TABLE IF NOT EXISTS employee_address_request (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    address_type VARCHAR(20) NOT NULL,
+    line1 VARCHAR(255) NOT NULL,
+    line2 VARCHAR(255) NULL,
+    city VARCHAR(100) NOT NULL,
+    postal_code VARCHAR(30) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+    requested_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at DATETIME NULL,
+    reviewed_by INT NULL,
+    CONSTRAINT fk_emp_addr_req_user FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT fk_emp_addr_req_reviewed_by FOREIGN KEY (reviewed_by) REFERENCES users(id)
+);
+
+ALTER TABLE employee_address DROP COLUMN IF EXISTS state;
+ALTER TABLE employee_address_request DROP COLUMN IF EXISTS state;
